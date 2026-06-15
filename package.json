@@ -1,5 +1,5 @@
 {
-  "name": "job-tracker",
+  "name": "applaid",
   "version": "0.1.0",
   "private": false,
   "description": "Open source job application lifecycle tracker with Supabase auth and multi-user support",
