@@ -1,54 +1,71 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { useAuth } from '@applaid/core';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { signIn, loading } = useAuth();
-  const [error, setError] = useState<string | null>(null);
+  const [isSignUp, setIsSignUp] = useState(false);
+  const { signIn, signUp, loading, error } = useAuth();
 
-  const handleLogin = async () => {
-    try {
-      setError(null);
-      await signIn(email, password);
-    } catch (e: any) {
-      setError(e.message || 'Login failed');
+  const handleSubmit = () => {
+    if (isSignUp) {
+      signUp(email, password);
+    } else {
+      signIn(email, password);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>ApplAId</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        placeholderTextColor="#666"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="#666"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      {error && <Text style={styles.errorText}>{error}</Text>}
-      <TouchableOpacity 
-        style={styles.button} 
-        onPress={handleLogin}
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.buttonText}>Login</Text>
-        )}
-      </TouchableOpacity>
-    </View>
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <View style={styles.form}>
+        <Text style={styles.title}>ApplAId</Text>
+        <Text style={styles.subtitle}>track the hunt.</Text>
+        
+        {error && <Text style={styles.error}>{error}</Text>}
+        
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            placeholderTextColor="#6a6865"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="#6a6865"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+        </View>
+
+        <TouchableOpacity 
+          style={styles.button}
+          onPress={handleSubmit}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color="#0e0e0f" />
+          ) : (
+            <Text style={styles.buttonText}>{isSignUp ? 'Sign Up' : 'Login'}</Text>
+          )}
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => setIsSignUp(!isSignUp)}>
+          <Text style={styles.toggleText}>
+            {isSignUp ? 'Already have an account? Login' : "Don't have an account? Sign Up"}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -56,38 +73,64 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0e0e0f',
+  },
+  form: {
+    flex: 1,
     justifyContent: 'center',
-    padding: 20,
+    padding: 30,
   },
   title: {
     fontSize: 32,
-    fontWeight: 'bold',
-    color: '#fff',
+    color: '#c8a96e',
+    fontStyle: 'italic',
     textAlign: 'center',
+    fontFamily: 'SpaceMono',
+  },
+  subtitle: {
+    fontSize: 12,
+    color: '#6a6865',
+    textAlign: 'center',
+    marginTop: 4,
     marginBottom: 40,
+    fontFamily: 'SpaceMono',
+  },
+  error: {
+    color: '#e05a5a',
+    textAlign: 'center',
+    marginBottom: 20,
+    fontFamily: 'SpaceMono',
+  },
+  inputContainer: {
+    marginBottom: 20,
   },
   input: {
-    backgroundColor: '#1e1e1f',
-    color: '#fff',
+    backgroundColor: '#1e1e21',
+    borderWidth: 1,
+    borderColor: '#2a2a2e',
+    color: '#e8e6e0',
     padding: 15,
-    borderRadius: 8,
-    marginBottom: 15,
+    borderRadius: 6,
+    marginBottom: 12,
+    fontSize: 14,
+    fontFamily: 'SpaceMono',
   },
   button: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#c8a96e',
     padding: 15,
-    borderRadius: 8,
+    borderRadius: 6,
     alignItems: 'center',
-    marginTop: 10,
+    marginBottom: 20,
   },
   buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: '#0e0e0f',
     fontSize: 16,
+    fontWeight: '600',
+    fontFamily: 'SpaceMono',
   },
-  errorText: {
-    color: '#ef4444',
-    marginBottom: 10,
+  toggleText: {
+    color: '#6a6865',
     textAlign: 'center',
-  }
+    fontSize: 12,
+    fontFamily: 'SpaceMono',
+  },
 });

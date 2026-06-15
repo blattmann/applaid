@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useApplications } from '@applaid/core';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../navigation/types';
@@ -9,83 +9,63 @@ type Props = {
 };
 
 export default function AddApplicationScreen({ navigation }: Props) {
-  const { createApplication } = useApplications();
-  const [loading, setLoading] = useState(false);
+  const { addApplication } = useApplications();
   const [form, setForm] = useState({
     company: '',
     role_title: '',
-    role_url: '',
-    status: 'active' as const,
-    applied_at: new Date().toISOString().slice(0, 10),
-    source: 'other' as const,
-    resume_variant: '',
-    notes: '',
-    salary_min: null as number | null,
-    salary_max: null as number | null,
-    salary_currency: 'USD',
-    rejected_at: null,
-    rejection_stage: null,
-    rejection_reason: null,
-    rejection_category: null,
-    offer_date: null,
-    offer_amount: null,
-    offer_notes: null,
+    status: 'active',
+    job_description_url: '',
   });
 
-  const handleSubmit = async () => {
-    try {
-      setLoading(true);
-      const res = await createApplication(form);
-      if (res?.error) {
-        alert(res.error);
-      } else {
-        navigation.goBack();
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
+  const handleSave = async () => {
+    if (!form.company || !form.role_title) {
+      Alert.alert('Error', 'Company and Role are required');
+      return;
     }
+    await addApplication(form);
+    navigation.goBack();
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.label}>Company Name</Text>
-      <TextInput
-        style={styles.input}
-        value={form.company}
-        onChangeText={(val) => setForm({ ...form, company: val })}
-        placeholder="e.g. Google"
-        placeholderTextColor="#666"
-      />
+    <ScrollView style={styles.container}>
+      <View style={styles.form}>
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>COMPANY</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="e.g. Acme Corp"
+            placeholderTextColor="#6a6865"
+            value={form.company}
+            onChangeText={(v) => setForm({ ...form, company: v })}
+          />
+        </View>
 
-      <Text style={styles.label}>Role Title</Text>
-      <TextInput
-        style={styles.input}
-        value={form.role_title}
-        onChangeText={(val) => setForm({ ...form, role_title: val })}
-        placeholder="e.g. Software Engineer"
-        placeholderTextColor="#666"
-      />
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>ROLE TITLE</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="e.g. Senior Frontend Engineer"
+            placeholderTextColor="#6a6865"
+            value={form.role_title}
+            onChangeText={(v) => setForm({ ...form, role_title: v })}
+          />
+        </View>
 
-      <Text style={styles.label}>Notes</Text>
-      <TextInput
-        style={[styles.input, styles.textArea]}
-        value={form.notes || ''}
-        onChangeText={(val) => setForm({ ...form, notes: val })}
-        multiline
-        numberOfLines={4}
-        placeholder="Additional info..."
-        placeholderTextColor="#666"
-      />
+        <View style={styles.inputGroup}>
+          <Text style={styles.label}>URL (OPTIONAL)</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Job description URL"
+            placeholderTextColor="#6a6865"
+            value={form.job_description_url}
+            onChangeText={(v) => setForm({ ...form, job_description_url: v })}
+          />
+        </View>
 
-      <TouchableOpacity 
-        style={styles.button} 
-        onPress={handleSubmit}
-        disabled={loading}
-      >
-        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Save Application</Text>}
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+          <Text style={styles.saveButtonText}>SAVE APPLICATION</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 }
@@ -95,35 +75,43 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#0e0e0f',
   },
-  content: {
+  form: {
     padding: 20,
+    paddingTop: 40,
   },
-  label: {
-    color: '#9ca3af',
-    marginBottom: 8,
-    fontSize: 14,
-  },
-  input: {
-    backgroundColor: '#1e1e1f',
-    color: '#fff',
-    padding: 15,
-    borderRadius: 8,
+  inputGroup: {
     marginBottom: 20,
   },
-  textArea: {
-    height: 120,
-    textAlignVertical: 'top',
+  label: {
+    fontSize: 10,
+    color: '#6a6865',
+    letterSpacing: 1,
+    marginBottom: 8,
+    textTransform: 'uppercase',
+    fontFamily: 'SpaceMono',
   },
-  button: {
-    backgroundColor: '#3b82f6',
+  input: {
+    backgroundColor: '#1e1e21',
+    borderWidth: 1,
+    borderColor: '#2a2a2e',
+    color: '#e8e6e0',
     padding: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 10,
+    borderRadius: 6,
+    fontSize: 14,
+    fontFamily: 'SpaceMono',
   },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
+  saveButton: {
+    backgroundColor: '#c8a96e',
+    padding: 18,
+    borderRadius: 6,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  saveButtonText: {
+    color: '#0e0e0f',
+    fontSize: 14,
+    fontWeight: '600',
+    letterSpacing: 1,
+    fontFamily: 'SpaceMono',
   },
 });
