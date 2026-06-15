@@ -1,0 +1,39 @@
+{
+  "name": "job-tracker",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Open source job application lifecycle tracker with Supabase auth and multi-user support",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint src --ext .ts,.tsx",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.44.2",
+    "date-fns": "^3.6.0",
+    "i18next": "^26.3.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-i18next": "^17.0.8",
+    "react-router-dom": "^6.23.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "@vitest/ui": "^4.1.9",
+    "jsdom": "^29.1.1",
+    "typescript": "^5.4.5",
+    "vite": "^7.3.5",
+    "vitest": "^4.1.9"
+  }
+}

@@ -1,0 +1,244 @@
+.root {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-2);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+}
+
+.userBadge {
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.signOutBtn {
+  font-size: 11px;
+  color: var(--text-3);
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+}
+.signOutBtn:hover {
+  color: var(--text-2);
+  border-color: var(--border-2);
+}
+
+.statsBar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-2);
+  flex-wrap: wrap;
+}
+
+.statCard {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 10px 20px 10px 0;
+  margin-right: 20px;
+  border-right: 1px solid var(--border);
+}
+
+.statCard:last-child {
+  border-right: none;
+}
+
+.statLabel {
+  font-size: 10px;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.statValue {
+  font-size: 20px;
+  font-family: var(--font-display);
+  font-weight: 300;
+  color: var(--text);
+}
+
+.stageBreakdown {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 10px 0;
+}
+
+.stageChip {
+  font-size: 10px;
+  color: var(--text-3);
+  background: var(--bg-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2px 7px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.toolbarLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.search {
+  width: 220px;
+  flex-shrink: 0;
+}
+
+.filters {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.filter,
+.filterActive {
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  font-size: 11px;
+  border: 1px solid var(--border);
+  color: var(--text-3);
+  transition: all 0.12s;
+  font-family: var(--font-body);
+}
+
+.filter:hover {
+  color: var(--text-2);
+  border-color: var(--border-2);
+}
+
+.filterActive {
+  background: var(--bg-4);
+  border-color: var(--border-2);
+  color: var(--text);
+}
+
+.addBtn {
+  padding: 7px 14px;
+  background: var(--accent);
+  color: var(--bg);
+  border-radius: var(--radius);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  white-space: nowrap;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+.addBtn:hover {
+  opacity: 0.88;
+}
+
+.tableWrap {
+  width: 100%;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 820px;
+}
+
+.table thead th {
+  text-align: left;
+  padding: 8px 12px;
+  font-size: 10px;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  background: var(--bg-2);
+  position: sticky;
+  top: 53px;
+}
+
+.row {
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+
+.row:hover {
+  background: var(--bg-2);
+}
+
+.row td {
+  padding: 10px 12px;
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+.company {
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.role {
+  color: var(--text-2);
+  max-width: 240px;
+}
+
+.muted {
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius);
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.empty {
+  padding: 48px 24px;
+  color: var(--text-3);
+  font-size: 12px;
+  text-align: center;
+}
