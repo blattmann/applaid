@@ -1,10 +1,10 @@
 import { useState, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useApplications } from '../hooks/useApplications'
+import { useApplications } from '@applaid/core'
 import { ApplicationForm } from '../components/ApplicationForm'
-import { getAppConfigValue } from '../lib/constants'
-import type { Application, TimelineStage } from '../types'
+import { getAppConfigValue } from '@applaid/core'
+import type { Application, TimelineStage } from '@applaid/core'
 import { format, parseISO } from 'date-fns'
 import styles from './ApplicationPage.module.css'
 

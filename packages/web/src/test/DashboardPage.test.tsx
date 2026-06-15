@@ -2,15 +2,15 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen, within } from '@testing-library/react'
 import { DashboardPage } from '../pages/DashboardPage'
 import { BrowserRouter } from 'react-router-dom'
-import * as useAuthHook from '../hooks/useAuth'
-import * as useApplicationsHook from '../hooks/useApplications'
-import { Application } from '../types'
+import * as useAuthHook from '@applaid/core'
+import * as useApplicationsHook from '@applaid/core'
+import { Application } from '@applaid/core'
 import type { User } from '@supabase/supabase-js'
 
 // Mock dependencies
-vi.mock('../hooks/useAuth')
-vi.mock('../hooks/useApplications')
-vi.mock('../lib/supabase')
+
+
+
 
 const renderWithRouter = (ui: React.ReactElement) => {
   return render(ui, {

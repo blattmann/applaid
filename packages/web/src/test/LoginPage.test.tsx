@@ -4,7 +4,7 @@ import { LoginPage } from '../pages/LoginPage'
 import { BrowserRouter } from 'react-router-dom'
 
 // Mock useAuth
-vi.mock('../hooks/useAuth', () => ({
+vi.mock('@applaid/core', () => ({
   useAuth: () => ({
     signIn: vi.fn(),
     signUp: vi.fn(),

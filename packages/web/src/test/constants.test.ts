@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { getAppConfigValue, RESUME_VARIANTS } from '../lib/constants'
+import { getAppConfigValue, RESUME_VARIANTS } from '@applaid/core'
 
 describe('App Constants', () => {
   const t = (key: string) => key

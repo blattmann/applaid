@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { Application, ApplicationStatus, ApplicationSource, RejectionStage, RejectionCategory } from '../types'
-import { getAppConfigValue, RESUME_VARIANTS } from '../lib/constants'
+import type { Application, ApplicationStatus, ApplicationSource, RejectionStage, RejectionCategory } from '@applaid/core'
+import { getAppConfigValue, RESUME_VARIANTS } from '@applaid/core'
 import styles from './ApplicationForm.module.css'
 
 interface Props {

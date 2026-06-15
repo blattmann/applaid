@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useAuth } from '../hooks/useAuth'
+import { useAuth } from '@applaid/core'
 import styles from './LoginPage.module.css'
 
 export function LoginPage() {
