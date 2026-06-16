@@ -1,8 +1,8 @@
-# jobtracker
+# ApplAId
 
 A self-hosted job application lifecycle tracker built with React, Vite, TypeScript, and Supabase.
 
-jobtracker helps you track every application from the first click to the final decision. It keeps applications, timeline events, recruiter notes, rejection details, resume variants, compensation expectations, and offer information in one place.
+ApplAId helps you track every application from the first click to the final decision. It keeps applications, timeline events, recruiter notes, rejection details, resume variants, compensation expectations, and offer information in one place.
 
 The app is multi-user and uses Supabase Auth plus row-level security, so every user only sees their own data. Your data lives in your own Supabase project.
 
@@ -10,7 +10,7 @@ The app is multi-user and uses Supabase Auth plus row-level security, so every u
 
 ## What this app does
 
-jobtracker is designed for people who want a structured overview of their job search instead of scattered notes, spreadsheets, and email threads.
+ApplAId is designed for people who want a structured overview of their job search instead of scattered notes, spreadsheets, and email threads.
 
 You can track:
 
@@ -81,8 +81,8 @@ Before running the project, make sure you have:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/jobtracker.git
-cd jobtracker
+git clone https://github.com/blattmann/applaid.git
+cd applaid
 npm install
 ```
 
@@ -279,7 +279,7 @@ To add another language:
 
 ## Data ownership
 
-jobtracker is designed to run against your own Supabase project.
+ApplAId is designed to run against your own Supabase project.
 
 That means:
 
