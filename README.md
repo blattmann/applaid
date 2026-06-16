@@ -95,7 +95,7 @@ Create a new Supabase project at supabase.com.
 Then open the Supabase SQL Editor and run the contents of:
 
 ```txt
-supabase-schema.sql
+packages/web/supabase-schema.sql
 ```
 
 This creates the required tables, relationships, and row-level security policies.
@@ -104,13 +104,13 @@ This creates the required tables, relationships, and row-level security policies
 
 ### 3. Configure environment variables
 
-Copy the example environment file:
+Copy the example environment file for the web app:
 
 ```bash
-cp .env.example .env.local
+cp packages/web/.env.example packages/web/.env.local
 ```
 
-Then edit `.env.local`:
+Then edit `packages/web/.env.local`:
 
 ```env
 VITE_SUPABASE_URL=https://your-project.supabase.co
@@ -130,7 +130,7 @@ Project Settings → API
 Start the local development server:
 
 ```bash
-npm run dev
+npm run web
 ```
 
 Vite will print the local URL in the terminal, usually:
@@ -216,20 +216,55 @@ VITE_SUPABASE_PUBLISHABLE_KEY=your-publishable-key-here
 
 ### Vercel
 
-Recommended settings:
+Vercel has known issues injecting VITE_* environment variables into the build for Vite projects, particularly on team accounts.
 
-```txt
-Framework preset: Vite
-Build command: npm run build
-Output directory: dist
+The reliable workaround is to commit a .env.production file to the repo:
+
+1. Copy packages/web/.env.example to packages/web/.env.production
+2. Fill in your real values
+3. Remove .env.production from .gitignore in packages/web (it needs to be committed so Vite picks it up at build time)
+4. Deploy to Vercel — Vite reads .env.production automatically during vite build
+
+Note: Your publishable key is a public key by design — it is safe to commit. Supabase Row Level Security handles data access control.
+
+Also note: On Vercel Hobby plan, private GitHub repos can only be deployed from a personal account, not a team account. If you hit a "Hobby Plan does not support collaboration" error, either use Netlify instead or deploy from your personal Vercel account.
+
+## Run the mobile app
+
+The mobile app is in packages/mobile and uses Expo with React Navigation.
+
+### Setup
+
+1. Install dependencies:
+```bash
+cd packages/mobile
+npm install --legacy-peer-deps
 ```
 
-Add the same environment variables in Vercel before deploying:
+2. Copy the environment file:
+```bash
+cp .env.example .env
+```
 
+3. Fill in packages/mobile/.env:
 ```env
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_PUBLISHABLE_KEY=your-publishable-key-here
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_PUBLISHABLE_KEY=your-publishable-key-here
 ```
+
+4. Start the Expo development server:
+```bash
+npx expo start
+```
+
+5. Scan the QR code with Expo Go on your device (iOS or Android).
+   Expo Go must be SDK 54 or later.
+
+### Notes
+
+- The mobile app shares business logic with the web app via packages/core
+- Authentication uses the same Supabase project as the web app
+- No Apple Developer account or Google Play account required for local development via Expo Go
 
 ---
 
@@ -240,7 +275,7 @@ VITE_SUPABASE_PUBLISHABLE_KEY=your-publishable-key-here
 Resume variant suggestions are stored in:
 
 ```txt
-src/config.json
+packages/core/src/config.json
 ```
 
 Example:
@@ -264,16 +299,16 @@ These values are suggestions only. You can still enter a custom resume variant i
 All user-facing strings are stored in:
 
 ```txt
-src/i18n/locales/en.json
+packages/core/src/i18n/locales/en.json
 ```
 
 To add another language:
 
-1. Copy `src/i18n/locales/en.json`
+1. Copy `packages/core/src/i18n/locales/en.json`
 2. Rename the copy, for example `de.json`
 3. Translate the values
 4. Keep the keys unchanged
-5. Register the locale in `src/i18n/index.ts`
+5. Register the locale in `packages/core/src/i18n/index.ts`
 
 ---
 
