@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Application, ApplicationStatus, ApplicationSource, RejectionStage, RejectionCategory } from '@applaid/core'
-import { getAppConfigValue, RESUME_VARIANTS } from '@applaid/core'
+import { getAppConfigValue, RESUME_VARIANT_SUGGESTIONS } from '@applaid/core'
 import styles from './ApplicationForm.module.css'
 
 interface Props {
@@ -88,7 +88,7 @@ export function ApplicationForm({ initial, onSave, onClose, title }: Props) {
   const modalTitle = title || (initial ? t('ui.editApplication') : t('ui.addApplication'))
 
   return (
-    <div className={styles.overlay} onClick={e => { if (e.target === e.currentTarget) onClose() }}>
+    <div className={styles.overlay}>
       <div className={styles.modal}>
         <div className={styles.modalHeader}>
           <h2 className={styles.modalTitle}>{modalTitle}</h2>
@@ -124,15 +124,15 @@ export function ApplicationForm({ initial, onSave, onClose, title }: Props) {
                 </select>
               </Field>
               <Field label={t('fields.resumeVariant')}>
-                <input
-                  list="resume-variants"
+                <select
                   value={resumeVariant}
                   onChange={e => setResumeVariant(e.target.value)}
-                  placeholder="e.g. Staff Frontend"
-                />
-                <datalist id="resume-variants">
-                  {RESUME_VARIANTS.map(v => <option key={v} value={v} />)}
-                </datalist>
+                >
+                  <option value="">—</option>
+                  {RESUME_VARIANT_SUGGESTIONS.map(v => (
+                    <option key={v} value={v}>{v}</option>
+                  ))}
+                </select>
               </Field>
             </div>
             <div className={styles.grid3}>

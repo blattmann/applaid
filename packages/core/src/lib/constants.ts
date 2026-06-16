@@ -3,6 +3,7 @@ import config from '../config.json'
 import i18n from '../i18n'
 
 export const RESUME_VARIANTS: string[] = config.resumeVariants
+export const RESUME_VARIANT_SUGGESTIONS = RESUME_VARIANTS
 
 export const getAppConfig = (): AppConfig => ({
   labels: {
@@ -86,4 +87,6 @@ export const getAppConfig = (): AppConfig => ({
  * Using a getter to ensure translations are reactive.
  */
 export const getAppConfigValue = () => getAppConfig()
+
+export const APP_CONFIG = getAppConfig()
 

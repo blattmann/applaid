@@ -1,27 +1,59 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
-import { useApplications } from '@applaid/core';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import { useApplications, ApplicationSource, ApplicationStatus } from '@applaid/core';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../navigation/types';
-import { Picker } from '@react-native-picker/picker';
+import { SelectField } from '../components/SelectField';
+
+interface AddApplicationForm {
+  company: string
+  role_title: string
+  role_url: string
+  applied_at: string
+  source: ApplicationSource
+  resume_variant: string
+  salary_min: number | null
+  salary_max: number | null
+  salary_currency: string
+  status: ApplicationStatus
+  notes: string
+  rejected_at: null
+  rejection_stage: null
+  rejection_category: null
+  rejection_reason: null
+  offer_date: null
+  offer_amount: null
+  offer_notes: null
+}
 
 type Props = {
   navigation: NativeStackNavigationProp<MainStackParamList, 'AddApplication'>;
 };
 
 export default function AddApplicationScreen({ navigation }: Props) {
-  const { addApplication } = useApplications();
+  const { createApplication } = useApplications();
+  const resumeVariantOptions = [
+    'Staff Frontend Engineer',
+    'Head of Front-End Engineering',
+    'Engineering Manager',
+    'VP Engineering',
+    'Technical Fellow',
+    'Staff Product Platform Engineer',
+    'CTO',
+    'Principal Engineer',
+  ].map(v => ({ label: v, value: v }));
+
   const [form, setForm] = useState({
     company: '',
     role_title: '',
     role_url: '',
     applied_at: new Date().toISOString().split('T')[0],
-    source: 'linkedin',
+    source: 'linkedin' as ApplicationSource,
     resume_variant: '',
     salary_min: '',
     salary_max: '',
     salary_currency: 'USD',
-    status: 'active',
+    status: 'active' as ApplicationStatus,
     notes: '',
     rejected_at: '',
     rejection_stage: 'application',
@@ -38,14 +70,23 @@ export default function AddApplicationScreen({ navigation }: Props) {
       return;
     }
 
-    const payload = {
+    const payload: AddApplicationForm = {
       ...form,
-      salary_min: form.salary_min ? parseInt(form.salary_min) : undefined,
-      salary_max: form.salary_max ? parseInt(form.salary_max) : undefined,
+      source: form.source as ApplicationSource,
+      status: form.status as ApplicationStatus,
+      salary_min: form.salary_min ? parseInt(form.salary_min) : null,
+      salary_max: form.salary_max ? parseInt(form.salary_max) : null,
+      rejected_at: null,
+      rejection_stage: null,
+      rejection_category: null,
+      rejection_reason: null,
+      offer_date: null,
+      offer_amount: null,
+      offer_notes: null,
     };
 
     try {
-      await addApplication(payload as any);
+      await createApplication(payload);
       navigation.goBack();
     } catch (error) {
       Alert.alert('Error', 'Failed to save application');
@@ -68,31 +109,31 @@ export default function AddApplicationScreen({ navigation }: Props) {
   );
 
   const renderPicker = (label: string, key: keyof typeof form, options: { label: string, value: string }[]) => (
-    <View style={styles.inputGroup}>
-      <Text style={styles.label}>{label}</Text>
-      <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={form[key]}
-          onValueChange={(v) => setForm({ ...form, [key]: v })}
-          style={styles.picker}
-          dropdownIconColor="#c8a96e"
-        >
-          {options.map(opt => (
-            <Picker.Item key={opt.value} label={opt.label} value={opt.value} color="#e8e6e0" />
-          ))}
-        </Picker>
-      </View>
-    </View>
+    <SelectField
+      label={label}
+      value={form[key]}
+      options={options}
+      onChange={(v) => setForm({ ...form, [key]: v })}
+    />
   );
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.form}>
-        <Text style={styles.sectionHeader}>ROLE</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1, backgroundColor: '#0e0e0f' }}
+      keyboardVerticalOffset={100}
+    >
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ paddingBottom: 120 }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.form}>
+          <Text style={styles.sectionHeader}>ROLE</Text>
         {renderInput('COMPANY *', 'company', 'e.g. Acme Corp')}
         {renderInput('ROLE TITLE *', 'role_title', 'e.g. Senior Frontend Engineer')}
         {renderInput('ROLE URL', 'role_url', 'Job description URL', 'url')}
-        
+
         <View style={styles.row}>
           <View style={{ flex: 1, marginRight: 10 }}>
             {renderInput('SALARY MIN', 'salary_min', '0', 'numeric')}
@@ -112,13 +153,19 @@ export default function AddApplicationScreen({ navigation }: Props) {
         {renderInput('APPLIED AT (YYYY-MM-DD)', 'applied_at', '2024-01-01')}
         {renderPicker('SOURCE', 'source', [
           { label: 'LinkedIn', value: 'linkedin' },
-          { label: 'Company Site', value: 'company_site' },
+          { label: 'Company site', value: 'company_site' },
           { label: 'Referral', value: 'referral' },
-          { label: 'Cold Outreach', value: 'cold_outreach' },
-          { label: 'Recruiter', value: 'recruiter' },
+          { label: 'Cold outreach', value: 'cold_outreach' },
+          { label: 'Recruiter / agency', value: 'recruiter' },
           { label: 'Other', value: 'other' },
         ])}
-        {renderInput('RESUME VARIANT', 'resume_variant', 'e.g. Fullstack v2')}
+        <SelectField
+          label="RESUME VARIANT"
+          value={form.resume_variant}
+          options={resumeVariantOptions}
+          onChange={v => setForm({ ...form, resume_variant: v })}
+          placeholder="Select resume variant..."
+        />
 
         <Text style={styles.sectionHeader}>STATUS</Text>
         {renderPicker('CURRENT STATUS', 'status', [
@@ -169,6 +216,7 @@ export default function AddApplicationScreen({ navigation }: Props) {
         </TouchableOpacity>
       </View>
     </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -215,17 +263,6 @@ const styles = StyleSheet.create({
   textArea: {
     height: 100,
     textAlignVertical: 'top',
-  },
-  pickerContainer: {
-    backgroundColor: '#1e1e21',
-    borderWidth: 1,
-    borderColor: '#2a2a2e',
-    borderRadius: 6,
-    overflow: 'hidden',
-  },
-  picker: {
-    color: '#e8e6e0',
-    height: 50,
   },
   row: {
     flexDirection: 'row',

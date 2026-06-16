@@ -1,7 +1,12 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = (import.meta as any).env.VITE_SUPABASE_URL as string | undefined
-const supabaseKey = (import.meta as any).env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined
+const supabaseUrl = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_SUPABASE_URL)
+  ? import.meta.env.VITE_SUPABASE_URL as string
+  : (typeof process !== 'undefined' ? process.env?.VITE_SUPABASE_URL : undefined) as string | undefined
+
+const supabaseKey = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_SUPABASE_PUBLISHABLE_KEY)
+  ? import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string
+  : (typeof process !== 'undefined' ? process.env?.VITE_SUPABASE_PUBLISHABLE_KEY : undefined) as string | undefined
 
 if (!supabaseUrl || !supabaseKey) {
   console.warn('Supabase env vars missing — running in test/offline mode')
