@@ -45,21 +45,17 @@ You can track:
 ## Project structure
 
 ```txt
-.
-├── public/
-├── src/
-│   ├── components/
-│   ├── config.json
-│   ├── i18n/
-│   │   └── locales/
-│   │       └── en.json
-│   ├── pages/
-│   ├── services/
-│   └── main.tsx
-├── supabase-schema.sql
-├── .env.example
-├── package.json
-└── README.md
+packages/
+  core/          — shared types, hooks, Supabase client, i18n, config
+  web/           — React + Vite web application
+    src/
+    supabase-schema.sql
+    .env.example
+  mobile/        — Expo React Native mobile app
+    src/
+    .env.example
+README.md
+package.json
 ```
 
 ---
@@ -68,7 +64,7 @@ You can track:
 
 Before running the project, make sure you have:
 
-* Node.js installed
+* Node.js 20+ installed (required for Expo SDK 54)
 * npm installed
 * A Supabase project
 * The Supabase project URL
@@ -84,6 +80,12 @@ Before running the project, make sure you have:
 git clone https://github.com/blattmann/applaid.git
 cd applaid
 npm install
+```
+
+*Note: `npm install` from the root installs the web and core packages only. The mobile app requires a separate installation (see "Run the mobile app" below):*
+
+```bash
+cd packages/mobile && npm install --legacy-peer-deps
 ```
 
 ---
@@ -154,7 +156,7 @@ npm run build
 Preview the production build locally:
 
 ```bash
-npm run preview
+cd packages/web && npm run preview
 ```
 
 ---
